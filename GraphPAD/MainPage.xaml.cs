@@ -23,7 +23,7 @@ namespace GraphPAD
         public bool isHeadPhonesOn;
         public bool isVideoOn;
         public bool isAddVetexOn;
-        public bool isRemoveVertexOn;
+        public bool isRemoveVertexOn; //ez
         public bool isFreeModeOn;
         public float paintsize;
         private bool _flag; //Флаг для логики микрофона (Проверка на то, был ли выключен микрофон до выключения звука)
