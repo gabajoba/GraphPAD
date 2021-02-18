@@ -14,6 +14,6 @@ namespace GraphPAD
     public partial class App : Application
     {
         //hello test 2
-        //hello from fake 
+        //hello from fake 2
     }
 }
