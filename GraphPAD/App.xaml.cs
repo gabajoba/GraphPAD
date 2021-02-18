@@ -13,6 +13,6 @@ namespace GraphPAD
     /// </summary>
     public partial class App : Application
     {
-        //hello test
+        //hello test 2
     }
 }

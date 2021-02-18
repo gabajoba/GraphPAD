@@ -4,15 +4,15 @@
 winexe
 C#
 .cs
-C:\Users\popko\Source\Repos\gabajoba\GraphPAD\GraphPAD\obj\Debug\
+C:\Users\popko\Source\Repos\gabajoba\GraphPAD\GraphPAD\obj\Release\
 GraphPAD
 none
 false
-DEBUG;TRACE
+TRACE
 C:\Users\popko\Source\Repos\gabajoba\GraphPAD\GraphPAD\App.xaml
 41508107601
 
-9-1210103276
+8-367743909
 15-132400354
 AuthPage.xaml;MainPage.xaml;RegPage.xaml;SettingsPage.xaml;
 
