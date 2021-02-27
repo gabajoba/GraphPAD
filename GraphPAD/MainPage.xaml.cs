@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GraphPAD.Data.User;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -27,6 +28,8 @@ namespace GraphPAD
         public bool isFreeModeOn;
         public float paintsize;
         private bool _flag; //Флаг для логики микрофона (Проверка на то, был ли выключен микрофон до выключения звука)
+        public int lobbyCount;
+        public int lobbyButtonsMargin;
 
         Brush _customBrush;
         Random _rand = new Random();
@@ -44,10 +47,12 @@ namespace GraphPAD
             isHeadPhonesOn = true;
             isVideoOn = false;
             _flag = false;
+            lobbyCount = 0;
+            lobbyButtonsMargin = 10;
             voiceChatTextBlock.Text = "Голосовой чат подключен";
             videoTextBlock.Text = "Видео отключено";
             videoTextBlock.Foreground = Brushes.DarkGray;
-            
+
             function = null;
             isAddVetexOn = false;
             isRemoveVertexOn = false;
@@ -57,8 +62,26 @@ namespace GraphPAD
             FreeModeCanvas.Visibility = Visibility.Hidden;
 
             Camera3.Visibility = Visibility.Hidden;
+
+            conferenssionString.Text = "Конференция № ...";
+            ControlCanvas.Visibility = Visibility.Hidden;
+            infoTextBlock.Visibility = Visibility.Visible;
+            leaveButton.Visibility = Visibility.Hidden;
+            CancelLobbyButton.Visibility = Visibility.Hidden;
+            ConferensionIDTextBox.Visibility = Visibility.Hidden;
+            ConnectToLobbyButton.Visibility = Visibility.Hidden;
+
+            nameString.Text = UserInfo.Email;
+            //if (LoggedOn)
+            //{
+            //    //пользователь зашёл под своим аккаунтом
+            //}
+            //else
+            //{
+            //    //пользователь зашёл под гостевым аккаунтом
+            //}
         }
-        
+
         private void TextChatButton_Clicked(object sender, RoutedEventArgs e)
         {
             TextChatCanvas.Visibility = Visibility.Visible;
@@ -177,28 +200,76 @@ namespace GraphPAD
         }
         private void LobbyLeave_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("LobbyLeave_Click");
+            ConferensionIDTextBox.BorderBrush = Brushes.Gray;
+            GraphCanvas.Visibility = Visibility.Hidden;
+            FreeModeCanvas.Visibility = Visibility.Hidden;
+            ControlCanvas.Visibility = Visibility.Hidden;
+            conferenssionString.Text = "Конференция № ...";
+            leaveButton.Visibility = Visibility.Hidden;
+
+            CreateLobbyButton.Visibility = Visibility.Visible;
+            ConferensionIDTextBox.Visibility = Visibility.Hidden;
+            CancelLobbyButton.Visibility = Visibility.Hidden;
+            ConnectToLobbyButton.Visibility = Visibility.Hidden;
+            LobbysCanvas.Visibility = Visibility.Visible;
         }
         private void Ez_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Why u click?");
+            GraphCanvas.Visibility = Visibility.Visible;
+            ControlCanvas.Visibility = Visibility.Visible;
+            conferenssionString.Text = "Конференция №2284";
+            leaveButton.Visibility = Visibility.Visible;
+            LobbysCanvas.Visibility = Visibility.Hidden;
+            //MessageBox.Show("Why u click?");
         }
-        private void ConnectToLobby_Click(object sender, RoutedEventArgs e)
+        private void EnterLobby_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("ConnectToLobby_Click");
+            CreateLobbyButton.Visibility = Visibility.Hidden;
+            ConferensionIDTextBox.Visibility = Visibility.Visible;
+            CancelLobbyButton.Visibility = Visibility.Visible;
+            ConnectToLobbyButton.Visibility = Visibility.Visible;
         }
-        private void OnClosing(object sender, CancelEventArgs cancelEventArgs)
+        private void CreateLobby_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show(this, "Вы действительно хотите выйти ? ", "Подтверждение", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+            if (MessageBox.Show(this, "Создать новую конференцию?", "Подтверждение", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
             {
-                cancelEventArgs.Cancel = true;
+                //pass
             }
             else
             {
-                Process.GetCurrentProcess().Kill();
+                try
+                {
+                    //создание конференции с уникальным ID
+                    lobbyCount += 1;
+                    lobbyButtonsMargin += 70;
+                    if (lobbyCount > 8)
+                    {
+                        LobbysCanvas.Height = LobbysCanvas.Height + 70;
+                    }
+                    ConferensionsCountTextBlock.Text = "Конференций: " + lobbyCount;
+                    Button testbutton = new Button();
+                    testbutton.Click += Ez_Click;
+                    //testbutton.Content = lobbyCount;
+                    testbutton.Width = 64;
+                    testbutton.Height = 64;
+                    testbutton.Margin = new Thickness(15, lobbyButtonsMargin, 0, 0);
+                    testbutton.BorderBrush = null;
+                    testbutton.ToolTip = "Конференция №" + lobbyCount;
+                    var path = "Resources/account.png";
+                    Uri resourceUri = new Uri(path, UriKind.Relative);
+                    StreamResourceInfo streamInfo = Application.GetResourceStream(resourceUri);
+                    BitmapFrame temp = BitmapFrame.Create(streamInfo.Stream);
+                    testbutton.Background = new ImageBrush(temp);
+                    LobbysCanvas.Children.Add(testbutton);
+                    MessageBox.Show("Конференция успешно создана", "Сообщение");
+                }
+                catch
+                {
+                    MessageBox.Show("Ошибка", "Что-то пошло не так", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
-
         }
+
         //----------------------------------------------------------------------
         private void workWithCanvasLeftDown(object sender, MouseButtonEventArgs e)
         {
@@ -397,7 +468,8 @@ namespace GraphPAD
                 BitmapFrame temp = BitmapFrame.Create(streamInfo.Stream);
                 freeModeImage.Source = temp;
                 freeModeTextBlock.Text = "Режим графов";
-                freeModeBtn.ToolTip = "Включить свободный режим";
+                freeModeBtn.ToolTip = "Включить режим графов";
+
             }
             else
             {
@@ -413,7 +485,7 @@ namespace GraphPAD
                 BitmapFrame temp = BitmapFrame.Create(streamInfo.Stream);
                 freeModeImage.Source = temp;
                 freeModeTextBlock.Text = "Свободный режим";
-                freeModeBtn.ToolTip = "Выключить свободный режим";
+                freeModeBtn.ToolTip = "Включить свободный режим";
             }
             Button btn = sender as Button;
             btn.Background = btn.Background == Brushes.DarkGray ? (SolidColorBrush)(new BrushConverter().ConvertFrom("#00000000")) : Brushes.DarkGray;
@@ -446,6 +518,46 @@ namespace GraphPAD
             if (count > 0)
             {
                 FreeModeCanvas.Children.Clear();
+            }
+        }
+        private void OnClosing(object sender, CancelEventArgs cancelEventArgs)
+        {
+            if (MessageBox.Show(this, "Вы действительно хотите выйти ? ", "Подтверждение", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+            {
+                cancelEventArgs.Cancel = true;
+            }
+            else
+            {
+                Process.GetCurrentProcess().Kill();
+            }
+
+        }
+
+        private void CancelLobby_Click(object sender, RoutedEventArgs e)
+        {
+            CreateLobbyButton.Visibility = Visibility.Visible;
+            ConferensionIDTextBox.Visibility = Visibility.Hidden;
+            CancelLobbyButton.Visibility = Visibility.Hidden;
+            ConnectToLobbyButton.Visibility = Visibility.Hidden;
+        }
+
+        private void ConnectToLobby_Click(object sender, RoutedEventArgs e)
+        {
+            string _conferensionID = ConferensionIDTextBox.Text.Trim().ToLower(); //Trim() - Удаление лишних символов
+            if (_conferensionID == "")
+            {
+                ConferensionIDTextBox.ToolTip = "Введите ID конференции";
+                ConferensionIDTextBox.BorderBrush = Brushes.Red;
+            }
+            else
+            {
+                ConferensionIDTextBox.ToolTip = _conferensionID.ToString();
+                ConferensionIDTextBox.BorderBrush = Brushes.Gray;
+                GraphCanvas.Visibility = Visibility.Visible;
+                ControlCanvas.Visibility = Visibility.Visible;
+                conferenssionString.Text = "Конференция №2284";
+                leaveButton.Visibility = Visibility.Visible;
+                LobbysCanvas.Visibility = Visibility.Hidden;
             }
         }
     }

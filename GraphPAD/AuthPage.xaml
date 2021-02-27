@@ -16,11 +16,12 @@
                 <TextBlock Text="GraphPAD" FontSize="30" FontWeight="Bold" Margin="0 0 0 10" TextAlignment="Center"/>
                 <TextBox x:Name="textboxLogin" materialDesign:HintAssist.Hint="Введите логин" Style="{StaticResource MaterialDesignFloatingHintTextBox}" MaxLines="1" MaxLength="30"/>
                 <PasswordBox x:Name="passwordboxPassword" materialDesign:HintAssist.Hint="Введите пароль" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" MaxLength="40"/>
+                <CheckBox x:Name="checkboxRemember" IsChecked="False" Click="checkboxRemember_Click" Content="Запомнить меня на этом компьютере" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,-10" VerticalContentAlignment="Bottom" Height="25"/>
                 <Button Content="Авторизация" Margin="0 20" Click="AuthButton_Clicked"/>
-                <Grid Margin="0 0 0 0" Height="70">
+                <Grid Margin="0 -15 0 0" Height="70">
                     <TextBlock HorizontalAlignment="Left" Text="Нет аккаунта?" FontSize="16" FontWeight="Bold" VerticalAlignment="Top" Margin="0,6,0,0" />
                     <Button HorizontalAlignment="Right" VerticalAlignment="Top" Content="Зарегистрироваться" FontSize="16" Click="OpenRegPage" Style="{StaticResource MaterialDesignFlatButton}"/>
-                    <Button VerticalAlignment="Bottom" HorizontalAlignment="Center" Padding="0 0 0 0" Content="Продолжить без входа" FontSize="12" Click="OpenMainPageWithoutAuth" Style="{StaticResource MaterialDesignFlatButton}" Foreground="Black"/>
+                    <Button VerticalAlignment="Bottom" HorizontalAlignment="Center" Padding="0 0 0 0" Content="Продолжить без входа" FontSize="12" Click="OpenMainPageGuest" Style="{StaticResource MaterialDesignFlatButton}" Foreground="Black"/>
                 </Grid>
             </StackPanel>
         </Border>
